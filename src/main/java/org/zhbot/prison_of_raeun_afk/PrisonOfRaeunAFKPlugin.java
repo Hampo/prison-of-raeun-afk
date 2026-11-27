@@ -215,7 +215,7 @@ public class PrisonOfRaeunAFKPlugin extends Plugin
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded event)
 	{
-		if (lootChestOpen || !config.preventExitWithoutLoot())
+		if (!insidePrison)
 			return;
 
 		if (event.getType() != MenuAction.GAME_OBJECT_FIRST_OPTION.getId())
@@ -226,10 +226,24 @@ public class PrisonOfRaeunAFKPlugin extends Plugin
 			return;
 
 		final var entry = event.getMenuEntry();
-		if (entry.getIdentifier() != ObjectID.GRAVEYARD_POR_COURSE_END)
+		if (!lootChestOpen && config.preventExitWithoutLoot() && entry.getIdentifier() == ObjectID.GRAVEYARD_POR_COURSE_END)
+		{
+			entry.setDeprioritized(true);
 			return;
+		}
 
-		entry.setDeprioritized(true);
+		if (config.preventExitWithoutLoot() && entry.getIdentifier() == ObjectID.GRAVEYARD_POR_STEPPINGSTONE_CLICK)
+		{
+			final var worldView = client.getWorldView(entry.getWorldViewId());
+			if (worldView == null)
+				return;
+
+			final var worldPoint = WorldPoint.fromScene(worldView, event.getActionParam0(), event.getActionParam1(), worldView.getPlane());
+			if (!SteppingStone.SafeObjects.getOrDefault(worldPoint, true))
+				entry.setDeprioritized(true);
+
+			return;
+		}
 	}
 
 	private boolean checkInsidePrison()

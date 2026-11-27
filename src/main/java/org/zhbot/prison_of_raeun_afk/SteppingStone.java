@@ -4,10 +4,13 @@ import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class SteppingStone {
@@ -97,6 +100,7 @@ public class SteppingStone {
             ObjectID.GRAVEYARD_POR_STEPPINGSTONE_27_CENTER,
             ObjectID.GRAVEYARD_POR_STEPPINGSTONE_27_EAST
     );
+    public static final Map<WorldPoint, Boolean> SafeObjects = new HashMap<>();
 
     @Getter
     private GameObject object;
@@ -142,9 +146,10 @@ public class SteppingStone {
 
     public void clearObject()
     {
-        this.object = null;
-        this.objectComposition = null;
-        this.varbitID = -1;
+        SafeObjects.remove(object.getWorldLocation());
+        object = null;
+        objectComposition = null;
+        varbitID = -1;
         initialized = false;
         safe = false;
     }
@@ -190,5 +195,6 @@ public class SteppingStone {
 
         var impostor = objectComposition.getImpostor();
         safe = impostor != null && impostor.getId() == ObjectID.GRAVEYARD_POR_STEPPINGSTONE_SAFE;
+        SafeObjects.put(object.getWorldLocation(), safe);
     }
 }

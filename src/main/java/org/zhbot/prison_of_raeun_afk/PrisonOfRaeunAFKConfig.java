@@ -88,17 +88,17 @@ public interface PrisonOfRaeunAFKConfig extends Config
 	}
 
 	@ConfigSection(
-			name = "Highlight Obstacles",
-			description = "Configure obstacle highlights",
+			name = "Obstacles",
+			description = "Configure obstacle settings",
 			position = 2
 	)
-	String highlightObstaclesSection = "highlightObstaclesSection";
+	String obstaclesSection = "obstaclesSection";
 
 	@ConfigItem(
 			keyName = "highlightObstacles",
 			name = "Highlight Obstacles",
 			description = "Highlight course obstacles stones.",
-			section = highlightObstaclesSection,
+			section = obstaclesSection,
 			position = 0
 	)
 	default boolean highlightObstacles()
@@ -111,7 +111,7 @@ public interface PrisonOfRaeunAFKConfig extends Config
 			keyName = "obstacleColour",
 			name = "Obstacle Colour",
 			description = "The colour for course obstacles.",
-			section = highlightObstaclesSection,
+			section = obstaclesSection,
 			position = 1
 	)
 	default Color obstacleColour()
@@ -121,9 +121,9 @@ public interface PrisonOfRaeunAFKConfig extends Config
 
 	@ConfigItem(
 			keyName = "highlightSafeSteppingStones",
-			name = "Highlight Safe",
+			name = "Highlight Safe Stepping Stones",
 			description = "Highlight safe stepping stones.",
-			section = highlightObstaclesSection,
+			section = obstaclesSection,
 			position = 2
 	)
 	default boolean highlightSafeSteppingStones()
@@ -134,14 +134,26 @@ public interface PrisonOfRaeunAFKConfig extends Config
 	@Alpha
 	@ConfigItem(
 			keyName = "safeSteppingStoneColour",
-			name = "Safe Colour",
+			name = "Stepping Stone Colour",
 			description = "The colour for safe stepping stones.",
-			section = highlightObstaclesSection,
+			section = obstaclesSection,
 			position = 3
 	)
 	default Color safeSteppingStoneColour()
 	{
 		return new Color(0, 255, 0, 50);
+	}
+
+	@ConfigItem(
+			keyName = "preventUnsafeSteppingStoneJump",
+			name = "Prevent Unsafe Jumps",
+			description = "Deprioritizes the jump option on unsafe stepping stones.",
+			section = obstaclesSection,
+			position = 4
+	)
+	default boolean preventUnsafeSteppingStoneJump()
+	{
+		return true;
 	}
 
 	@ConfigSection(
