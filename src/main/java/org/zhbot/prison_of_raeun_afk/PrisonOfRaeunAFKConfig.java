@@ -201,10 +201,41 @@ public interface PrisonOfRaeunAFKConfig extends Config
 	}
 
 	@ConfigSection(
+			name = "Chat Messages",
+			description = "Configure chat messages",
+			position = 4
+	)
+	String chatMessagesSection = "chatMessagesSection";
+
+	@ConfigItem(
+			keyName = "hideLapCount",
+			name = "Hide Lap Count",
+			description = "Hide the lap count game message.",
+			section = chatMessagesSection,
+			position = 0
+	)
+	default boolean hideLapCount()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "hideLapDuration",
+			name = "Hide Lap Duration",
+			description = "Hide the lap duration game message.",
+			section = chatMessagesSection,
+			position = 1
+	)
+	default boolean hideLapDuration()
+	{
+		return false;
+	}
+
+	@ConfigSection(
 			name = "Debug",
 			description = "Debug",
 			closedByDefault = true,
-			position = 4
+			position = 5
 	)
 	String debugSection = "debugSection";
 

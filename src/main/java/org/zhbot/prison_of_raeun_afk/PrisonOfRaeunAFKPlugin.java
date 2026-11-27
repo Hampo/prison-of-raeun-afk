@@ -56,6 +56,9 @@ public class PrisonOfRaeunAFKPlugin extends Plugin
 			ObjectID.GRAVEYARD_POR_STEPPINGSTONE_CLICK_LARGE
 	);
 
+	private static final String LAP_DURATION = "Lap duration: ";
+	private static final String LAP_COUNT = "Your Prison of Ræun lap count is: ";
+
 	@Inject
 	private Client client;
 
@@ -243,6 +246,27 @@ public class PrisonOfRaeunAFKPlugin extends Plugin
 				entry.setDeprioritized(true);
 
 			return;
+		}
+	}
+
+	@Subscribe
+	public void onChatMessage(ChatMessage event)
+	{
+		if (!insidePrison)
+			return;
+
+		if (event.getType() != ChatMessageType.GAMEMESSAGE)
+			return;
+
+		final var message = event.getMessage();
+		if ((config.hideLapCount() && message.startsWith(LAP_COUNT)) || (config.hideLapDuration() && message.startsWith(LAP_DURATION)))
+		{
+			final var lineBuffer = client.getChatLineMap().get(event.getType().getType());
+			if (lineBuffer == null)
+				return;
+
+			lineBuffer.removeMessageNode(event.getMessageNode());
+			client.refreshChat();
 		}
 	}
 
